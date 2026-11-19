@@ -76,4 +76,4 @@ Mỗi thành viên tự điền đóng góp, bằng chứng và exit ticket củ
 
 ### Công cụ hỗ trợ
 
-- Codex hỗ trợ đọc mã và dữ liệu, soạn Phiếu A và B, chuẩn bị cấu hình tiêu chí và vận hành, triển khai cổng phòng ngừa, chạy đánh giá và kiểm thử vòng 1.
+- AI hỗ trợ

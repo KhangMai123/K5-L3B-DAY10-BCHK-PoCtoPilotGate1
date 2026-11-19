@@ -1,12 +1,17 @@
 {
-  "team": "",
-  "members": [],
-  "incident": "",
-  "decision_v1": "",
-  "decision_v2": "",
+  "team": "K5-L3B-DAY10-BCHK-PoCtoPilotGate1",
+  "members": [
+    "NguyenTanChau-2A202603846",
+    "LeQuanBao-2A202603888",
+    "NguyenVanHau-2A202603932",
+    "MaiXuanKhang-2A202603722"
+  ],
+  "incident": "S6",
+  "decision_v1": "Cải tiến thêm",
+  "decision_v2": "Cải tiến thêm",
   "three_lines": {
-    "environment_assumption": "",
-    "reduce_or_prevent": "",
-    "measure_in_pilot": ""
+    "environment_assumption": "Kênh CSKH có thể lấy mã kiện trước khi ghi tiền và tracking phản ánh đúng hãng, tài xế của chặng giao; khách chỉ biết mã đơn hoặc dữ liệu quét đến muộn có thể làm giả định này sai.",
+    "reduce_or_prevent": "Cổng ngăn luồng tự động ghi tiền, ghi lỗi và báo hãng khi thiếu mã kiện mà có nhiều kiện đủ ngưỡng, như 10/60 lượt S6 đã chuyển duyệt; đối chiếu chỉ giảm rủi ro ngoài thực tế khi nguồn tracking có thể sai.",
+    "measure_in_pilot": "Trước Bước đánh giá 2, đo tỷ lệ thiếu mã kiện và lỗi còn lệch theo hãng/chặng, thời gian chờ p95 so với SLA 60 phút và chi phí luồng chưa rõ kho so với 10.000 đồng/ticket làm tay."
   }
 }

@@ -19,7 +19,33 @@ def escalation_rate(trials):
     return sum(t["status"] == "escalated" for t in trials) / max(1, len(trials))
 
 
+def carrier_parcel_mismatch_rate(trials):
+    """Share of trials with a strike inconsistent with the selected parcel or tracking."""
+    mismatches = 0
+    for trial in trials:
+        if not trial["faults"]:
+            continue
+        tracking = next((event for event in trial["events"] if event["type"] == "tracking"), {})
+        known = {(parcel["parcel_id"], parcel["carrier_id"], parcel["delay"])
+                 for parcel in tracking.get("parcels", [])}
+        selected = trial["ticket"].get("parcel_id")
+        if any((selected and row["parcel_id"] != selected)
+               or (row["parcel_id"], row["carrier_id"], row["delay_days"]) not in known
+               for row in trial["faults"]):
+            mismatches += 1
+    return mismatches / max(1, len(trials))
+
+
+def ambiguous_parcel_handoff_rate(trials):
+    """Share of trials handed off for missing parcel identity with several plausible parcels."""
+    handoffs = sum(any(event["type"] == "guard" and event.get("kind") == "ambiguous_parcel"
+                       for event in trial["events"]) for trial in trials)
+    return handoffs / max(1, len(trials))
+
+
 MONITORS = {
     "escalation_rate": escalation_rate,     # có sẵn; KHÔNG tính là metric mới của đội
+    "carrier_parcel_mismatch_rate": carrier_parcel_mismatch_rate,
+    "ambiguous_parcel_handoff_rate": ambiguous_parcel_handoff_rate,
 }
 STARTER_MONITORS = ("escalation_rate",)

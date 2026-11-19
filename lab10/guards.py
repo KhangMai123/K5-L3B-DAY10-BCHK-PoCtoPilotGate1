@@ -115,6 +115,8 @@ def _carrier_fault_gate(ctx, action, order, parcel, policy):
         return Verdict.deny("kiện đã có bản ghi lỗi hãng")
     cap = ctx.tools.ops_limits().get("max_auto_strikes_per_carrier_per_day")
     if cap is not None and len(carrier_faults) >= cap:
+        ctx.log("carrier_fault_review_required", order_id=order["order_id"],
+                parcel_id=parcel["parcel_id"], carrier_id=carrier_id, daily_cap=cap)
         return Verdict.deny("đã đủ số lỗi hãng tự động trong ngày; cần đối soát thủ công")
 
     fields = {"parcel_id": parcel["parcel_id"], "carrier_id": carrier_id,
@@ -151,8 +153,16 @@ def write_gate(ctx, action):
         return Verdict.allow()
 
     order = _ticket_order(ctx, action)
-    parcel = _tracking_parcel(ctx, order)
     policy = H.effective_policy(ctx.tools.lookup_policies(), ctx.as_of)
+    if tool == "issue_refund" and order and policy and not ctx.ticket.get("parcel_id"):
+        min_delay = policy["late"]["min_days_fee"]
+        candidates = [p["parcel_id"] for p in order["parcels"]
+                      if H.db_delay_days(p, ctx.as_of) >= min_delay]
+        if len(candidates) > 1:
+            ctx.log("ambiguous_parcel", order_id=order["order_id"], parcel_ids=candidates)
+            return Verdict.escalate("thiếu mã kiện và có nhiều kiện trễ đủ ngưỡng; cần xác minh trước khi ghi")
+
+    parcel = _tracking_parcel(ctx, order)
     if tool == "issue_refund":
         return _refund_gate(ctx, action, order, parcel, policy)
     if tool == "file_carrier_fault":

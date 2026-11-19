@@ -5,7 +5,7 @@
 - Tên nhóm (`TenNhom`, không dấu, không khoảng trắng): BCHK
 - Lớp: `L3B`
 - Repo của bàn: [K5-L3B-DAY10-BCHK-PoCtoPilotGate1](https://github.com/KhangMai123/K5-L3B-DAY10-BCHK-PoCtoPilotGate1)
-- Thẻ sự cố đã bốc (S1–S8): Chưa được cấp
+- Thẻ sự cố đã bốc (S1–S8): S6
 
 ## Thành viên
 
